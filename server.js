@@ -23,6 +23,7 @@ app.use("/notes", noteRouter);
 app.get("/", (req, res) => {
   res.send("API is live");
 });
-app.listen(process.env.PORT, () => {
-  console.log(`server is running`);
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`server is running ${PORT}`);
 });

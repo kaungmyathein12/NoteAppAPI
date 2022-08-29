@@ -16,6 +16,18 @@ router.get("/", auth, async (req, res) => {
     });
   }
 });
+router.get("/search/", auth, async (req, res) => {
+  try {
+    const name = req.query.name;
+    const notes = await Note.find({ title: { $regex: name, $options: "$i" } });
+    res.status(200).json({ status: "success", notes });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      error: "The note with the given name was not found!",
+    });
+  }
+});
 router.get("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
@@ -24,9 +36,13 @@ router.get("/:id", auth, async (req, res) => {
   } catch (error) {
     res
       .status(404)
-      .json({ status: "fail", error: "The note with ID was not found!" });
+      .json({
+        status: "fail",
+        error: "The note with the given ID was not found!",
+      });
   }
 });
+
 // Create Note
 router.post("/create", auth, async (req, res) => {
   try {
