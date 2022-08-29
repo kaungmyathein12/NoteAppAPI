@@ -8,7 +8,6 @@ const router = express.Router();
 router.get("/me", auth, async (req, res) => {
   try {
     const _id = req.user;
-    console.log(_id);
     let user = await User.findById(_id).select("-password");
     res.status(200).json({ status: "success", user });
   } catch (error) {
