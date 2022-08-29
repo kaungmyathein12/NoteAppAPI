@@ -77,9 +77,8 @@ router.post("/login", async (req, res) => {
         .json({ status: "fail", error: "Incorrect Password" });
     }
 
-    res
-      .status(200)
-      .json({ status: "success", jwtToken: generateToken(user._id) });
+    // const token = generateToken(user._id);
+    res.status(200).json({ status: "success", jwtToken: "1224" });
   } catch (error) {
     res.status(400).json({
       status: "fail",
