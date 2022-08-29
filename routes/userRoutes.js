@@ -43,7 +43,12 @@ router.post("/register", async (req, res) => {
     const token = jwt.sign(id, process.env.JWT_PRIVATE_KEY);
     res.status(200).json({ status: "success", jwtToken: token });
   } catch (error) {
-    res.status(400).json({ status: "fail", error });
+    res.status(400).json({
+      status: "fail",
+      error: {
+        privateKey: process.env.JWT_PRIVATE_KEY,
+      },
+    });
   }
 });
 
@@ -75,7 +80,12 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign(id, process.env.JWT_PRIVATE_KEY);
     res.status(200).json({ status: "success", jwtToken: token });
   } catch (error) {
-    res.status(400).json({ status: "fail", error });
+    res.status(400).json({
+      status: "fail",
+      error: {
+        privateKey: process.env.JWT_PRIVATE_KEY,
+      },
+    });
   }
 });
 
