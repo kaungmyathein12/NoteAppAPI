@@ -8,6 +8,7 @@ const router = express.Router();
 router.get("/me", auth, async (req, res) => {
   try {
     const _id = req.user;
+    console.log(_id);
     let user = await User.findById(_id).select("-password");
     res.status(200).json({ status: "success", user });
   } catch (error) {
@@ -38,6 +39,7 @@ router.post("/register", async (req, res) => {
     user = new User(req.body);
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(req.body.password, salt);
+    await user.save();
     const token = generateToken(user._id);
     res.status(200).json({ status: "success", jwtToken: token });
   } catch (error) {
