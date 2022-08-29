@@ -54,6 +54,7 @@ router.post("/register", async (req, res) => {
 
 // Login User
 router.post("/login", async (req, res) => {
+  let userId;
   try {
     const { error } = validateUser(req.body);
     if (error) {
@@ -77,6 +78,7 @@ router.post("/login", async (req, res) => {
         .json({ status: "fail", error: "Incorrect Password" });
     }
     const id = user._id.toString();
+    userId = id;
     const token = jwt.sign(id, process.env.JWT_PRIVATE_KEY);
     res.status(200).json({ status: "success", jwtToken: token });
   } catch (error) {
@@ -84,6 +86,7 @@ router.post("/login", async (req, res) => {
       status: "fail",
       error: {
         privateKey: process.env.JWT_PRIVATE_KEY,
+        userId,
       },
     });
   }
