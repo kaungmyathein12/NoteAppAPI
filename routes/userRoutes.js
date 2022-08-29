@@ -16,7 +16,6 @@ router.get("/me", auth, async (req, res) => {
 });
 
 const generateToken = (value) => {
-  console.log(process.env.JWT_PRIVATE_KEY);
   const token = jwt.sign(value, process.env.JWT_PRIVATE_KEY);
   return token;
 };
@@ -49,33 +48,29 @@ router.post("/register", async (req, res) => {
 
 // Login User
 router.post("/login", async (req, res) => {
-  try {
-    const { error } = validateUser(req.body);
-    if (error) {
-      return res
-        .status(400)
-        .json({ status: "fail", error: error.details[0].message });
-    }
-    let user = await User.findOne({ email: req.body.email });
-    if (!user) {
-      return res
-        .status(404)
-        .json({ status: "fail", error: "User was not found" });
-    }
-    const comparePassword = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
-    if (!comparePassword) {
-      return res
-        .status(400)
-        .json({ status: "fail", error: "Incorrect Password" });
-    }
-    const token = generateToken(user._id.toString());
-    res.status(200).json({ status: "success", jwtToken: token });
-  } catch (error) {
-    res.status(400).json({ status: "fail", error });
+  const { error } = validateUser(req.body);
+  if (error) {
+    return res
+      .status(400)
+      .json({ status: "fail", error: error.details[0].message });
   }
+  let user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return res
+      .status(404)
+      .json({ status: "fail", error: "User was not found" });
+  }
+  const comparePassword = await bcrypt.compare(
+    req.body.password,
+    user.password
+  );
+  if (!comparePassword) {
+    return res
+      .status(400)
+      .json({ status: "fail", error: "Incorrect Password" });
+  }
+  const token = generateToken(user._id.toString());
+  res.status(200).json({ status: "success", jwtToken: token });
 });
 
 module.exports = router;
