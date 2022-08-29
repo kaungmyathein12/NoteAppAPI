@@ -38,8 +38,9 @@ router.post("/register", async (req, res) => {
     user = new User(req.body);
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(req.body.password, salt);
-    await user.save();
-    const token = generateToken(user._id);
+    const newUser = await user.save();
+    const id = newUser._id.toString();
+    const token = jwt.sign(id, process.env.JWT_PRIVATE_KEY);
     res.status(200).json({ status: "success", jwtToken: token });
   } catch (error) {
     res.status(400).json({ status: "fail", error });
@@ -70,7 +71,8 @@ router.post("/login", async (req, res) => {
         .status(400)
         .json({ status: "fail", error: "Incorrect Password" });
     }
-    const token = generateToken(user._id);
+    const id = user._id.toString();
+    const token = jwt.sign(id, process.env.JWT_PRIVATE_KEY);
     res.status(200).json({ status: "success", jwtToken: token });
   } catch (error) {
     res.status(400).json({ status: "fail", error });
