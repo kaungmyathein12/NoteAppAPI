@@ -12,7 +12,7 @@ mongoose
     console.log("DB connection successful");
   })
   .catch((e) => {
-    console.log(process.env.MONGODB_DATABASE, e);
+    res.send("db not connected");
   });
 app.use(cors());
 app.use(express.json());
