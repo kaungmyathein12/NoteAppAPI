@@ -16,6 +16,7 @@ router.get("/me", auth, async (req, res) => {
 });
 
 const generateToken = (value) => {
+  console.log(process.env.JWT_PRIVATE_KEY);
   const token = jwt.sign(value, process.env.JWT_PRIVATE_KEY);
   return token;
 };
