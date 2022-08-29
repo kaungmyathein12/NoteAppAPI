@@ -1,11 +1,11 @@
 require("dotenv").config({ path: "./config.env" });
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require("cors");
+var cors = require("cors");
 const userRouter = require("./routes/userRoutes");
 const noteRouter = require("./routes/noteRoutes");
 const app = express();
-
+app.use(cors());
 mongoose
   .connect(process.env.MONGODB_DATABASE)
   .then(() => {
@@ -14,7 +14,6 @@ mongoose
   .catch((e) => {
     console.log(e);
   });
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
