@@ -6,9 +6,14 @@ const userRouter = require("./routes/userRoutes");
 const noteRouter = require("./routes/noteRoutes");
 const app = express();
 
-mongoose.connect(process.env.MONGODB_DATABASE).then(() => {
-  console.log("DB connection successful");
-});
+mongoose
+  .connect(process.env.MONGODB_DATABASE)
+  .then(() => {
+    console.log("DB connection successful");
+  })
+  .catch((e) => {
+    console.log(process.env.MONGODB_DATABASE, e);
+  });
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
