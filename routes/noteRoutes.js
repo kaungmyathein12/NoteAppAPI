@@ -18,8 +18,12 @@ router.get("/", auth, async (req, res) => {
 });
 router.get("/search/", auth, async (req, res) => {
   try {
+    const id = req.user;
     const name = req.query.name;
-    const notes = await Note.find({ title: { $regex: name, $options: "$i" } });
+    const notes = await Note.find({
+      title: { $regex: name, $options: "$i" },
+      userId: id,
+    });
     res.status(200).json({ status: "success", notes });
   } catch (error) {
     res.status(404).json({
@@ -34,12 +38,10 @@ router.get("/:id", auth, async (req, res) => {
     const note = await Note.findById(id);
     res.status(200).json({ status: "success", note });
   } catch (error) {
-    res
-      .status(404)
-      .json({
-        status: "fail",
-        error: "The note with the given ID was not found!",
-      });
+    res.status(404).json({
+      status: "fail",
+      error: "The note with the given ID was not found!",
+    });
   }
 });
 
